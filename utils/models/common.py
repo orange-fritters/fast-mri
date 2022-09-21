@@ -31,7 +31,7 @@ class ResBlock(nn.Module):
 
     def __init__(self, n_feats, res_scale=0.1):
         super(ResBlock, self).__init__()
-        mid_feats = int(n_feats/4)
+        mid_feats = int(n_feats / 4)
         self.body = nn.Sequential(
             nn.Conv2d(n_feats, mid_feats,
                       kernel_size=1, padding=0, stride=1),
