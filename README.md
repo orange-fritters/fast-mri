@@ -3,7 +3,7 @@
 
 # SNU FastMRI Challenge 
 
-🏆🏆🏆 **3rd Place** 🏆🏆🏆
+### 🏆🏆🏆 **3rd Place** 🏆🏆🏆
 
 The final submitted pytorch code for the **2022 SNU Fastmri Challenge**
 
@@ -31,9 +31,9 @@ the data. [[1]](##Reference)
 The final model is shown in the figure above.
 
 First, I developed a strategy to extract images from kspace using
-E2Evarnet, then concatenate it with grappa images to provide sources that were not enough with the kspace,
+**E2Evarnet**, then concatenate it with grappa images to provide sources that were not enough with the kspace,
 and applied Image Super Resolution's methodology in Image Domain to produce final results.
-This was also valid in terms of reducing the burden on the network. In the image domain, I used a network called RCAN
+This was also valid in terms of reducing the burden on the network. In the image domain, I used a network called **RCAN**
 as a baseline and modified it in my own way to learn and use it. 
 
 The structure of the RCAN is approximate as follows:
@@ -112,7 +112,7 @@ The size increased by 30 times, but I sacrificed only three times more training 
 Finally, 160 feature maps were formed in one Residual Attention Block,
 and a total of 100 blocks were learned in 160 feature maps each.
 
-** Tips on Gradient Checkpointing **
+**Tips on Gradient Checkpointing**
 1. Devide your model into several groups using Python class (additional tip : RIR! Residual in residual)
 2. The number of groups is related to numbers of checkpoints (#groups = #checkpoints - 1)
 3. TMI) Some posts recommend applying square root of total layer number as checkpoint number...
@@ -146,7 +146,7 @@ def __init__(self, args, conv=common.default_conv):
 ### Additional Details
 
 #### num_workers
-num_workers option of Pytorch DataLoader is a very useful option for speeding up training.
+num_workers option of Pytorch DataLoader is a very useful option for **speeding up training**.
 num_workers is the number of processes that load data in parallel.
 put num_workers option 4 times as your gpu number, and you can speed up training by 30%, 
 Especially your data I/O time is huge.
@@ -187,7 +187,7 @@ class CALayer(nn.Module):
         return x * y
 ```
 #### Self-Ensemble
-Self-Ensemble is a technique that increases the accuracy by averaging the results of one unique model by 
+**Self-Ensemble** is a technique that increases the accuracy by averaging the results of one unique model by 
 putting 180-degree rotation, flip, and 180-degree rotation images then reflip the output [[8]](#References)
 
 If you want to use Self-Ensemble with more flip and rotation you can modify the below code a little bit.
