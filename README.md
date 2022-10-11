@@ -26,7 +26,9 @@ the data. [[1]](##Reference)
 
 ## Model Structure
 <img src=./imgs/model_structure.png width="900" height="300" />
+
 ## Details
+
 ### Model
 The final model is shown in the figure above.
 
