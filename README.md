@@ -48,7 +48,7 @@ Gradient Checkpointing, which will be described later.
 The methodology I applied to solve the OOM problem of the model (out of memory) is as follows. First, the memory
 occupied by the baseline E2E varnet was huge, so we had to **freeze** the varnet and learn the image domain network.
 
-```
+```python
 # Parameter freezing Snippet
 for param in model.varnet.parameters():
     param.requires_grad = False
@@ -58,7 +58,7 @@ for param in model.varnet.parameters():
 Depth and efficiency could not be achieved without Residual learning to enhance the efficiency of the network.
 In addition, I changed all the residual block of RCAN to **bottleneck structure** to reduce the number of parameters
 Also, Res Scaling methodology was applied to stabilize the training process.
-```
+```python
 # BottleNeack Structure Snippet
 class ResBlock(nn.Module):
     def __init__(self, n_feats, res_scale=0.1):
@@ -90,7 +90,7 @@ This approach also saved the memory of the network.
 In addition, to save memory once more, the activation function ReLU was given the inplace option,
 saving about 10% of memory.
 There were also options such as PReLU(), but I used ReLU because I thought saving memory through inplacing was the key.
-```
+```python
 # Saving memory by ReLU inplacing 
 nn.ReLU(inplace=True)
 ```
@@ -120,7 +120,7 @@ and a total of 100 blocks were learned in 160 feature maps each.
 3. TMI) Some posts recommend applying square root of total layer number as checkpoint number...
 4. Place checkpoints at the forward function of your group class
 
-```
+```python
 # Grdient Checkpointing Snippets
 
 from torch.utils import checkpoint
@@ -152,7 +152,7 @@ num_workers option of Pytorch DataLoader is a very useful option for **speeding 
 num_workers is the number of processes that load data in parallel.
 put num_workers option 4 times as your gpu number, and you can speed up training by 30%, 
 Especially your data I/O time is huge.
-```
+```python
 # num_workers Snippets
 data_loader = DataLoader(
     dataset=data_storage,
@@ -167,7 +167,7 @@ RCAN was chosen as the baseline because Attention layer lowered weights of featu
 out of 160 feature maps and increased its **attention** for high frequency feature maps, which play a crucial role in
 SSIM. 
 
-```
+```python
 # Channel Attention Layer Snippets
 # REFERENCE!!! : https://github.com/sanghyun-son/EDSR-PyTorch 
 class CALayer(nn.Module):
@@ -195,7 +195,7 @@ putting 180-degree rotation, flip, and 180-degree rotation images then reflip th
 If you want to use Self-Ensemble with more flip and rotation you can modify the below code a little bit.
 If normal square sized image self-ensemble needed, of course you can modify the below code a little bit.
 
-```
+```python
 # Self-Ensemble Snippets : self_ensemble method of final model class (use this at the test phase instead of forward or calling)
     def self_ensemble(self, masked_kspace: torch.Tensor, mask: torch.Tensor, grappa: torch.Tensor) -> torch.Tensor:
         output = self.KNet(masked_kspace, mask)
@@ -276,7 +276,7 @@ datasets available at https://fastmri.org/dataset/
 
 Modifty the `train.py` file or use arp-parser and run it
 At the #result folder, directory of model checkpoint with the name of the network is made
-```
+```bash
 python train.py --net-name Test
                    --num-epochs 20  
                    --lr 1e-4 
@@ -295,7 +295,7 @@ python evaluate.py --net-name Test
 ```
 ### Test
 modify the net_name you want to test inside the `test_SSIM.py` file and run it
-```
+```python
 if __name__ == '__main__':
     NET_NAME = 'TEST'
 ```
